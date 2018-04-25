@@ -1,0 +1,21 @@
+#include "lpc11xx.h"
+#include "system_init.h"
+
+void SystemInit(void)
+{
+  LPC_SYSCON->PDRUNCFG = LPC_SYSCON->PDRUNCFG & 0xFFFFFF5F;
+
+  LPC_SYSCON->SYSPLLCLKSEL = 1;
+
+  LPC_SYSCON->SYSPLLCLKUEN = 0;
+  LPC_SYSCON->SYSPLLCLKUEN = 1;
+
+  LPC_SYSCON->SYSPLLCTRL = (3 + (1<<5)); // M = 4, P = 2
+	
+  while(LPC_SYSCON->SYSPLLSTAT == 0);
+
+  LPC_SYSCON->MAINCLKSEL = 3;
+
+  LPC_SYSCON->MAINCLKUEN = 0;
+  LPC_SYSCON->MAINCLKUEN = 1;
+}
